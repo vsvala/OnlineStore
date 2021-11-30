@@ -18,6 +18,7 @@ import Context from "./Context";
 
 
 const inventoryUrl = 'http://nginx:9000'
+const orderUrl = 'http://localhost:3001'
 
 
 export default class APP extends Component{
@@ -114,7 +115,7 @@ checkout = async () => {
   console.log(order, "Allaaaa")
   
  try {
- const response= await axios.post('http://localhost:3001/api/orders', order)
+ const response= await axios.post(orderUrl + '/api/orders', order)
    //console.log('spost', response)
     console.log('response data from post', response.data)
    
@@ -128,7 +129,7 @@ checkout = async () => {
 
     if (response.data.status === "OK") {
       console.log("status OK")
-    await axios.get(inventoryUrl+'/api/products').then(response => {
+    await axios.get(inventoryUrl+'/api/v1/products').then(response => {
       console.log("resp data/orders from invenrory",response.data)
       const products= response.data
       console.log( "puuttuva",response.data.products[1].id )
