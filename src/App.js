@@ -16,6 +16,10 @@ import ProductList from './components/ProductList';
 import Context from "./Context";
 
 
+
+const inventoryUrl = 'http://nginx:9000'
+
+
 export default class APP extends Component{
   constructor(props){
     super(props);
@@ -32,7 +36,7 @@ export default class APP extends Component{
     console.log("didmount")
 
   let cart = localStorage.getItem("cart");
-  await axios.get('http://localhost:3001/api/products').then(response => {
+  await axios.get(inventoryUrl+'/api/v1/products').then(response => {
   //const products =  productService.getProducts()  //get products_______________________________
   //productService.getAll().then(response => {
   const products= response.data 
@@ -110,7 +114,7 @@ checkout = async () => {
   console.log(order, "Allaaaa")
   
  try {
- const response= await axios.post('http://localhost:3001/api/order', order)
+ const response= await axios.post('http://localhost:3001/api/orders', order)
    //console.log('spost', response)
     console.log('response data from post', response.data)
    
@@ -124,7 +128,7 @@ checkout = async () => {
 
     if (response.data.status === "OK") {
       console.log("status OK")
-    await axios.get('http://localhost:3001/api/products').then(response => {
+    await axios.get(inventoryUrl+'/api/products').then(response => {
       console.log("resp data/orders from invenrory",response.data)
       const products= response.data
       console.log( "puuttuva",response.data.products[1].id )

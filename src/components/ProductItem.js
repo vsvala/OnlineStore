@@ -17,7 +17,7 @@ const ProductItem = props => {
           <div className="media-content">
             <b style={{ textTransform: "capitalize" }}>
               {product.name}{" "}
-              <span className="tag is-primary">${product.price}</span>
+              <span className="tag is-black">${product.price}</span>
             </b>
             <div>{product.shortDesc}</div>
             {product.stock > 0 ? (
