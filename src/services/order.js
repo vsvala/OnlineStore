@@ -1,5 +1,6 @@
 import axios from 'axios'
-const baseUrl = '/api/products'
+const baseUrl = '/api/order'
+//const baseUrl = 'http://localhost:3001/notes'
 
 
 const postOrder = async (order) => {

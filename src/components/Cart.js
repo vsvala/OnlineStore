@@ -46,7 +46,7 @@ const Cart = props => {
           </div>
         ) : (
           <div className="column">
-            <div className="title has-text-grey-light">No item in cart!</div>
+            <div className="title has-text-grey-light">Order sent cuccesfully!</div>
           </div>
         )}
       </div>

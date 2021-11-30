@@ -26,29 +26,28 @@ export default class APP extends Component{
     // this.routerRef=React.createRef();
     
   }
-  // async 
-  async componentDidMount() {
+
+
+  async componentDidMount(){
     console.log("didmount")
 
   let cart = localStorage.getItem("cart");
-
-  await axios.get('http://localhost:3001/products').then(response => {
+  await axios.get('http://localhost:3001/api/products').then(response => {
   //const products =  productService.getProducts()  //get products_______________________________
   //productService.getAll().then(response => {
   const products= response.data 
-  console.log("resp data",response.data)
-   console.log("products",{products})
+ console.log("products",{products})
   console.log("this",this.state)
 
   cart = cart? JSON.parse(cart) : {};
 
   this.setState({ products:products, cart });//productList
-  console.log("thisstate",this.state)
+  console.log("set this state to products and casrds",this.state)
   })
   }
 
   addToCart = cartItem => {
-
+    console.log("addToChart funktio")
     let cart = this.state.cart;
     if (cart[cartItem.id]) { //product name
       cart[cartItem.id].amount += cartItem.amount;//lisää amount jos on jo
@@ -60,10 +59,10 @@ export default class APP extends Component{
     }
     
     localStorage.setItem("cart", JSON.stringify(cart));
-    console.log(cart, "asetetaan cart localstoreeen")
+    console.log(cart, "add to cart() funktio asetetaan cart localstoreeen")
     //this.set.set(cart)
     this.setState({ cart });
-    console.log(this.state.cart.length, "pituusasetetaan state.product")
+    console.log(this.state.cart, "asetetaan cart state")
     
   };
   removeFromCart = cartItemId => {
@@ -74,6 +73,7 @@ export default class APP extends Component{
   };
   
   clearCart = () => {
+    console.log("clearCart localstore ja state.cart tyhjäys")
     let cart = {};
     localStorage.removeItem("cart");
     this.setState({ cart });
@@ -96,35 +96,72 @@ checkout = async () => {
       orderList.push({id:productId, amount:productAmount, name:productName, price:producPrice})
   }
   console.log(orderList, "orderlist");
+// const generateId = () => {
+//     const maxId = patients.length > 0
+//       ? Math.max(...patients.map(n => n.id))
+//       : 0
+//     return maxId + 1
+//   }
+
   const order= { 
+    //customId=generateId,
     products:orderList
   }
   console.log(order, "Allaaaa")
   
-/* try {
- const response= await axios.post("http://api/v2/order/", order)
-   console.log('spost', response)
-    console.log('post', response.data)
-  // // if (response. === OK) {
-  return response.data;
-  } catch (error) {
- return { error: 'Could not get events from db' }
- } */
+ try {
+ const response= await axios.post('http://localhost:3001/api/order', order)
+   //console.log('spost', response)
+    console.log('response data from post', response.data)
+   
+    //TODO //if (response. === OK) {
 
- const products = this.state.products.map(p => {
+/*     const products = this.state.products.map(p => {
       if (cart[p.name]) {
-        p.stock = p.stock - cart[p.name].amount; //vähentää product stock nimen mukaan tuotteen
+        p.stock = p.stock - cart[p.name].amount; //vähentää product stock nimen mukaan tuotteen  
+      } return p;
+    }) */
+
+    if (response.data.status === "OK") {
+      console.log("status OK")
+    await axios.get('http://localhost:3001/api/products').then(response => {
+      console.log("resp data/orders from invenrory",response.data)
+      const products= response.data
+      console.log( "puuttuva",response.data.products[1].id )
+      this.setState({ products });
+      this.clearCart();
+    })
+    }
+    else{
+     // TODO notification
+      console.log("Tilaus ei onnistunu")
+      console.log("Out of stock seuraavat tuotteet")
+      console.log(response.data.products.name)
+      //poistaako chartista? nollaako sinne ko. tuuotteen uudelleen lähettäessä
+      //lähetä tilaus ilman tuotteita tai tilaa lisää muita tuotteita ja lähetä uudelleen..
+      //pitäisikö esim pitää 40+10 (vara tuotetta stock lisäksi?)
+
+      //poistetaan ostokorista out of stock tuotteet/päivittään määrä...mitä tehdäään
+
+ }
+
+  return response.data;
+
+
+  } catch (error) {
+ return { error: 'Could not sent order' }
+ }
+
+ 
         
-   axios.put(
+/*    axios.put(
          `http://localhost:3001/products/${p.id}`,
          { ...p },
         )
       }
       return p;
-    });
+    }); */
   
-    this.setState({ products });
-    this.clearCart();
   };
 
 
