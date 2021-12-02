@@ -29,8 +29,7 @@ export default class APP extends Component{
   
   let cart = localStorage.getItem("cart");
   
-  try {
- 
+
   // const res = await axios.get('/api/products')
   // console.log(res)
   // console.log(res.data)
@@ -41,14 +40,10 @@ export default class APP extends Component{
   console.log("this",this.state)
 
   cart = cart? JSON.parse(cart) : {};
-
-  this.setState({ products:response, cart });
+  console.log("after")
+  this.setState({ products:products, cart });
   console.log("set this state to products and casrds",this.state)
 })
-
-} catch (error) {
-  return { error: 'Could not get products' }
-  }
 
   
   }
@@ -115,7 +110,6 @@ checkout = async () => {
     console.log('response data from post', response.data)
    
     //TODO //if (response. === OK) {
-
 /*     const products = this.state.products.map(p => {
       if (cart[p.name]) {
         p.stock = p.stock - cart[p.name].amount; //vähentää product stock nimen mukaan tuotteen  
