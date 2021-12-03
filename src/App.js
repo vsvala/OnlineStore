@@ -102,7 +102,7 @@ checkout = async () => {
   const order= { 
     products:orderList
   }
-  console.log(order, "Allaaaa")
+  console.log("Order to sent to service:", order)
   
  try {
  const response= await axios.post( '/api/orders', order)
@@ -110,6 +110,7 @@ checkout = async () => {
     console.log('response data from post', response.data)
    
     //TODO //if (response. === OK) {
+
 /*     const products = this.state.products.map(p => {
       if (cart[p.name]) {
         p.stock = p.stock - cart[p.name].amount; //vähentää product stock nimen mukaan tuotteen  
@@ -118,6 +119,13 @@ checkout = async () => {
 
     if (response.data.status === "OK") {
       console.log("status OK")
+  /*      const products = this.state.products.map(p => {
+      if (cart[p.name]) {
+        p.stock = p.stock - cart[p.name].amount; //vähentää product stock nimen mukaan tuotteen  
+      } return p;}) */
+     // this.setState({ products });
+      this.clearCart();
+
     await axios.get('/api/products').then(response => {
       console.log("resp data/orders from invenrory",response.data)
       const products= response.data
