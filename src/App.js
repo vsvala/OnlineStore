@@ -106,7 +106,6 @@ checkout = async () => {
   
  try {
  const response= await axios.post( '/api/orders', order)
-   //console.log('spost', response)
     console.log('response data from post', response.data)
    
     //TODO //if (response. === OK) {
@@ -128,22 +127,43 @@ checkout = async () => {
 
     await axios.get('/api/products').then(response => {
       console.log("resp data/orders from invenrory",response.data)
-      const products= response.data
-      console.log( "puuttuva",response.data.products[1].id )
-      this.setState({ products });
+      //const products= response.data
+      this.setState({ products:response.data });
+      console.log( "state after",  this.state.products);
       this.clearCart();
     })
     }
-    else{
+    else if (response.data.status === "NOT_OK"){
      // TODO notification
-      console.log("Tilaus ei onnistunu")
+      console.log("Tilaus ei onnistunut joitain tuotteita ei satavilla")
       console.log("Out of stock seuraavat tuotteet")
       console.log(response.data.products.name)
+      for (const item in response.data){
+        if(item.products.status==="NOT_OK"){
+          console.log("not ok", item.product.name)
+          //lisää listaan tai poista cartista..
+        }
+
+        console.log("all",item)
+
+      }
+      await axios.get('/api/products').then(response => {
+        console.log("resp data/orders from invenrory",response.data)
+        //const products= response.data
+        this.setState({ products:response.data });
+        console.log( "state after",  this.state.products);
+      })
+      // console.log( "puuttuva",response.data.products[1].id )
       //poistaako chartista? nollaako sinne ko. tuuotteen uudelleen lähettäessä
       //lähetä tilaus ilman tuotteita tai tilaa lisää muita tuotteita ja lähetä uudelleen..
       //pitäisikö esim pitää 40+10 (vara tuotetta stock lisäksi?)
 
       //poistetaan ostokorista out of stock tuotteet/päivittään määrä...mitä tehdäään
+
+ }
+ else{
+  console.log("Tilaus ei onnistunu something went wrong")
+
 
  }
 
