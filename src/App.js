@@ -115,10 +115,14 @@ checkout = async () => {
       console.log("POST NOT OK, Tilaus ei onnistunut joitain tuotteita ei satavilla")
       const notAvailable = response.data.products.filter(item=> item.status==="NOT_OK") 
       notAvailable.forEach(element => console.log(element.name));
-      notAvailable.forEach(element =>  this.setState({ notification: `OUT OF STOCK: ${element.name}   Please replace the order!!!!`}));
+      const noproducts=notAvailable.map(s=>s.name)
+      this.setState({ notification: `OUT OF STOCK:  ${noproducts}   Please replace the order!!!!`});
+      //notAvailable.forEach(element =>  this.setState({ notification: `OUT OF STOCK: ${element.name}   Please replace the order!!!!`}));
       setTimeout(() => {
         this.setState({ notification:null });    
-      }, 9000)
+      }, 15000)
+    
+
 
       await axios.get('/api/products').then(response => {
         console.log("resp data/orders from invenrory",response.data)
