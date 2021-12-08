@@ -19,15 +19,18 @@ const ProductItem = props => {
               {product.name}{" "}
               <span className="tag is-black">${product.price}</span>
             </b>
-            <div>{product.shortDesc}</div>
+            {/* <div>{product.shortDesc}</div> */}
+             <div></div>
             {product.stock > 0 ? (
               <small>{product.stock + " Available"}</small>
             ) : (
               <small className="has-text-danger">Out Of Stock</small>
             )}
             <div className="is-clearfix">
+            {product.stock > 0 ? (
               <button
                 className="button is-small is-outlined is-primary   is-pulled-right"
+
                 onClick={() =>
                   props.addToCart({
                     id: product.name,
@@ -38,6 +41,7 @@ const ProductItem = props => {
               >
                 Add to Cart
               </button>
+                 ) : ("")}
             </div>
           </div>
         </div>

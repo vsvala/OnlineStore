@@ -3,6 +3,8 @@
 import React from "react";
 import withContext from "../withContext";
 import CartItem from "./CartItem";
+import Notification from './Notification';
+
 
 const Cart = props => {
   const { cart } = props.context;
@@ -16,6 +18,7 @@ const Cart = props => {
       </div>
       <br />
       <div className="container">
+      <Notification message={props.context.notify}/>
         {cartKeys.length ? (
           <div className="column columns is-multiline">
             {cartKeys.map(key => (
@@ -46,10 +49,17 @@ const Cart = props => {
           </div>
         ) : (
           <div className="column">
-            <div className="title has-text-grey-light">Order sent cuccesfully!</div>
+            {/* <div className="title has-text-grey-light">Order sent cuccesfully!</div> */}
           </div>
+      
         )}
       </div>
+      <div className="title has-text-grey-light">
+       <Notification message={props.context.notification} /> </div>
+
+  {/*     <div className="error">
+        {props.context.notification}
+      </div> */}
     </>
   );
 };

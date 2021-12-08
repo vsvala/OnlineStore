@@ -15,6 +15,7 @@ const ProductList = props => {
         </div>
         <br />
         <div className="container">
+
           <div className="column columns is-multiline">
             {products && products.length ? (
               products.map((product, index) => (
