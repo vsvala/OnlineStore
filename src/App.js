@@ -23,15 +23,21 @@ export default class APP extends Component{
     };   
   }
 
-  //Initiates the product list by getting producst from inventory service and set productstate also gets cartstate from localstore
+//Initiates the product list by getting producst from inventory service and set productstate also gets cartstate from localstore
   async componentDidMount(){
-  let cart = localStorage.getItem("cart");
-  //TODO try catch
-  await axios.get('/api/products').then(response => {
-  const products= response.data 
-  cart = cart? JSON.parse(cart) : {};
-  this.setState({ products:products, cart });
-}) 
+    let cart = localStorage.getItem("cart");
+  try {
+   await axios.get('/api/products').then(response => {
+     const products= response.data 
+     cart = cart? JSON.parse(cart) : {};
+     this.setState({ products:products, cart });
+   }) 
+  } catch (error) {
+   this.setState({ notification: "Something went wrong, please refresh the page" });
+   setTimeout(() => {
+     this.setState({ notification:null });    
+   }, 5000)
+ } 
   }
 
 //Adds product to shopping cart, saves state to localstore and to cart state
@@ -83,28 +89,23 @@ checkout = async () => {
   
  try {
  const response= await axios.post( '/api/orders', order)
-    //console.log('post response data from or orderservise to front', response.data)
   
     if (response.data.status === "OK") {
-      //console.log("POST status OK getting products from inventory..")
       try {
-      await axios.get('/api/products').then(response => {
-     // console.log("response data, producst from invenrory after order",response.data)
-      this.setState({ products:response.data });
-     // console.log( "state after ordering products",  this.state.products);
-      this.clearCart();
-      this.setState({ notification:"Thank you for your order,  Order sent succefully"  });
-      setTimeout(() => {
-        this.setState({ notification:null });    
-      }, 5000)
-      })
-    } catch (error) {
-     // console.log("something went wrong with getting products state after failed order")
-      this.setState({ notification: "Something went wrong, please refresh the page" });
-      setTimeout(() => {
-        this.setState({ notification:null });    
-      }, 5000)
-    }   
+        await axios.get('/api/products').then(response => {
+        this.setState({ products:response.data });
+        this.clearCart();
+        this.setState({ notification:"Thank you for your order,  Order sent succefully"  });
+        setTimeout(() => {
+          this.setState({ notification:null });    
+        }, 5000)
+       })
+      } catch (error) {
+        this.setState({ notification: "Something went wrong, please refresh the page" });
+        setTimeout(() => {
+          this.setState({ notification:null });    
+        }, 5000)
+      }   
     }
     
    //If some products are not available, update product state, clear shopping cart and notify user to replace the order 
@@ -114,7 +115,7 @@ checkout = async () => {
       this.setState({ notification: `OUT OF STOCK:  ${noproducts}   Please replace the order!!!!`});
       setTimeout(() => {
         this.setState({ notification:null });    
-      }, 15000)
+        }, 15000)
     
 //fetch the newest product state from inventory service
   try {
